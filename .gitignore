@@ -1,0 +1,8 @@
+# Ignore all external 3rd party roles used as dependencies
+roles/external
+
+# Ignore any .idea files created by opening the repo in an Eclipse IDE
+.idea
+
+# Ignore any ansible site.retry files
+site*.retry

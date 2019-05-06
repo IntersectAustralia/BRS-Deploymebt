@@ -26,7 +26,7 @@ These tasks should be run on the machine that is being deployed to. They should 
 
 2. Test ssh connection to Github, see https://help.github.com/articles/testing-your-ssh-connection/
    ```ssh -T git@github.com```
-   You should see a message similar to "Hi IntersectAustralia/kirby-nhr! You've successfully authenticated, but GitHub does not provide shell access".
+   You should see a message similar to "Hi IntersectAustralia/USyd-BankRiskSimulator! You've successfully authenticated, but GitHub does not provide shell access".
 
 ## Running the Playbook
 
