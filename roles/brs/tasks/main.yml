@@ -1,0 +1,110 @@
+---
+
+- import_tasks: ./system_dependencies.yml
+
+- name:  Create project root
+  file:
+    path: "{{ brs_project_root }}"
+    state: directory
+    owner: devel
+    group: devel
+    mode: 0755
+  become: yes
+
+- name: check if service file exists
+  stat:
+    path: "{{ brs_service_files_path }}/brs.service"
+  register: service_file
+
+- name: Stop serving uWSGI if its Running
+  command: >
+    service brs stop
+    warn=False
+  when: service_file.stat.exists == True
+  become: yes
+
+# Install (uWSGI) python package.
+- name: Install pip3 requirements
+  command: >
+    pip3 install uwsgi
+  args:
+    chdir: "{{ brs_project_root }}"
+
+- name: Install pip3 requirements
+  command: >
+    pip3 install -r requirements.txt
+  args:
+    chdir: "{{ brs_project_root }}"
+
+- name: Pull source code from git
+  git:
+    repo: "{{ brs_git_repo }}"
+    dest: "{{ brs_project_root }}"
+    version: "{{ brs_project_git_tag }}"
+    force: yes
+    accept_hostkey: yes
+    key_file: "{{ brs_project_private_key_file }}"
+
+- name: Set BRS DB host for QA, Staging and Prod environments
+  lineinfile:
+    path: "{{ brs_project_root }}/config.ini"
+    regexp: "^DB_HOST=db$"
+    line: "DB_HOST=127.0.0.1"
+    backrefs: yes
+
+
+- name: Set BRS DB host for QA, Staging and Prod environments
+  lineinfile:
+    path: "{{ brs_project_root }}/brs/settings.py"
+    regexp: "^ALLOWED_HOSTS = [\"web.local\"]$"
+    line: "ALLOWED_HOSTS = [\"{{ ansible_nodename}}\"]"
+
+- name: Copy brs.ini file to create a socket
+  template:
+    src: brs.ini.j2
+    dest: "{{ brs_project_root }}/brs.ini"
+    owner: devel
+    group: www-data
+  become: yes
+
+- name: Copy brs.service file to serve uWSGI
+  template:
+    src: brs.service.j2
+    dest: "{{ brs_service_files_path }}/brs.service"
+    owner: devel
+    group: www-data
+  become: yes
+
+- name: Remove all data from the database (does not empty database e.g. tables)
+  command: >
+
+     python3 manage.py flush --no-input
+  args:
+    chdir: "{{ brs_project_root }}"
+  when: clean_install is defined and clean_install | bool 
+
+  # Start uWSGI service
+- name: Run database migrations
+  command: >
+    python3 manage.py migrate
+  args:
+    chdir: "{{ brs_project_root }}"
+
+- name: Copy Nginx configuration file
+  template:
+    src: brs.j2
+    dest: /etc/nginx/sites-enabled/brs
+  notify: restart nginx
+  become: yes
+
+- name: Remove default NGINX config file
+  file:
+    state: absent
+    path: /etc/nginx/sites-enabled/default
+  become: yes
+
+- name: Start BRS app via the service file
+  service:
+    name: brs
+    state: restarted
+  become: yes
