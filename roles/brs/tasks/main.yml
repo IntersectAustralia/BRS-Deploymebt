@@ -23,16 +23,10 @@
   when: service_file.stat.exists == True
   become: yes
 
-# Install (uWSGI) python package.
-# - name: Install pip3 requirements
-#   command: >
-#     pip3 install uwsgi
-#   args:
-#     chdir: "{{ brs_project_root }}"
-
+#Install (uWSGI) python package.
 - name: Install pip3 requirements
   command: >
-    pip3 install -r requirements.txt
+    pip3 install uwsgi
   args:
     chdir: "{{ brs_project_root }}"
 
@@ -44,6 +38,12 @@
     force: yes
     accept_hostkey: yes
     key_file: "{{ brs_project_private_key_file }}"
+
+- name: Install pip3 requirements
+  command: >
+    pip3 install -r requirements.txt
+  args:
+    chdir: "{{ brs_project_root }}"
 
 - name: Set BRS DB host for QA, Staging and Prod environments
   lineinfile:
