@@ -26,8 +26,12 @@ server {
 
     location / {
         include uwsgi_params;
-        uwsgi_pass unix:///var/www/brs/brs.sock;
+        uwsgi_pass unix://{{ brs_project_root }}/brs.sock;
         proxy_read_timeout 9000s;
+    }
+
+    location /static/ {
+       root {{ brs_project_root }}/simulator;
     }
 
     # BEGIN restrictions.conf

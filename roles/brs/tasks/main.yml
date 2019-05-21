@@ -24,11 +24,11 @@
   become: yes
 
 # Install (uWSGI) python package.
-- name: Install pip3 requirements
-  command: >
-    pip3 install uwsgi
-  args:
-    chdir: "{{ brs_project_root }}"
+# - name: Install pip3 requirements
+#   command: >
+#     pip3 install uwsgi
+#   args:
+#     chdir: "{{ brs_project_root }}"
 
 - name: Install pip3 requirements
   command: >
@@ -56,8 +56,8 @@
 - name: Set BRS DB host for QA, Staging and Prod environments
   lineinfile:
     path: "{{ brs_project_root }}/brs/settings.py"
-    regexp: "^ALLOWED_HOSTS = [\"web.local\"]$"
-    line: "ALLOWED_HOSTS = [\"{{ ansible_nodename}}\"]"
+    regexp: '^ALLOWED_HOSTS\s=\s\[\"web.local\"\]$'
+    line: 'ALLOWED_HOSTS = ["{{ ansible_nodename }}"]'
 
 - name: Copy brs.ini file to create a socket
   template:
@@ -77,7 +77,6 @@
 
 - name: Remove all data from the database (does not empty database e.g. tables)
   command: >
-
      python3 manage.py flush --no-input
   args:
     chdir: "{{ brs_project_root }}"
@@ -108,3 +107,22 @@
     name: brs
     state: restarted
   become: yes
+
+- name: Create Super user
+  shell: >
+    echo "from simulator.models import User; User.objects.create_superuser('admin','email=darshan@intersect.org.au','password=QAZPLMXCVBNs')" | python3 manage.py shell
+  args:
+    chdir: "{{ brs_project_root }}"
+    executable: /bin/bash
+  when: clean_install is defined and clean_install | bool 
+
+- name: Create Super user
+  shell: >
+    echo "from simulator.models import User; User.objects.create_superuser('admin','darshan@intersect.org.au','{{ superuser_password }}')" | python3 manage.py shell
+  args:
+    chdir: "{{ brs_project_root }}"
+    executable: /bin/bash
+  ignore_errors: yes
+  changed_when:
+    - '"ERROR" in result.stderr'
+  when: clean_install is defined and clean_install | bool 

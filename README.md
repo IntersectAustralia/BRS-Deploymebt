@@ -35,7 +35,7 @@ These tasks should be run on the machine that is being deployed to. They should 
    1. Run the playbook.
       NOTE: Running the below command will wipe out the existing data and the database.
 
-      ```ansible-playbook site.yml -i hosts-<qa/staging> --extra-vars "clean_install=true"```
+      ```ansible-playbook site.yml -i hosts-<qa/staging> --extra-vars "clean_install=true superuser_password=<NEW PASSWORD>"```
 
       * `clean_install` - Setting this to true will perform ansible tasks tagged with `clean_install`. Example: Dropping existing data or database.
       * `project_secret_key` - This should be a long random string and is used for security purposes by the app. The easiest way to supply this is to use LastPass to generate a 50 character string and then paste it in this command.
