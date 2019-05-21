@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve BRS server
+After=network.target
+
+[Service]
+User=devel
+Group=www-data
+WorkingDirectory=/var/www/brs
+ExecStart=/home/devel/.local/bin/uwsgi --ini brs.ini --wsgi-file brs/wsgi.py --uid devel --gid www-data
+#ExecStart=/home/devel/.local/bin/uwsgi --ini brs.ini --wsgi-file brs/wsgi.py --uid devel --gid www-data --logto /var/www/brs/logs/service.logs
+
+[Install]
+WantedBy=multi-user.target

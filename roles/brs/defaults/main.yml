@@ -1,0 +1,18 @@
+---
+
+# By Default set clean_install to false, so by default ansible runs without clean_install
+clean_install: false
+
+# Github repo for BRS; Ansible uses ssh to clone the repository
+brs_git_repo: git@github.com:IntersectAustralia/USyd-BankRiskSimulator.git
+
+# Github branch to clone, by default it should pull the master branch
+brs_project_git_tag: master
+
+brs_project_private_key_file: /home/devel/.ssh/id_rsa
+
+# Project root - Desitnation where the project is installed on the target virtual machine
+brs_project_root: "/var/www/brs"
+
+# Service file PATH
+brs_service_files_path: "/etc/systemd/system"

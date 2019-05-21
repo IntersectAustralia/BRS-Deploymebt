@@ -1,0 +1,5 @@
+[brs]
+brs-staging.intersect.org.au
+
+[brs:vars]
+ansible_python_interpreter=/usr/bin/python3
