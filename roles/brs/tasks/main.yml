@@ -132,9 +132,8 @@
   when: clean_install is defined and clean_install | bool 
 
 - name: Restart BRS app
-  service:
-    name: brs
-    state: restarted
+  command:
+    service brs restart
   become: yes
 
 - name: Start/Restart postfix
