@@ -131,6 +131,24 @@
   ignore_errors: yes
   when: clean_install is defined and clean_install | bool 
 
+- name: Seed initial cash flow
+  shell: >
+    sh create_initial_cashflow.sh
+  args:
+    chdir: "{{ brs_project_root }}/db_init"
+    executable: /bin/bash
+  ignore_errors: yes
+  when: clean_install is defined and clean_install | bool 
+
+- name: Seed initial cash flow
+  shell: >
+    sh create_initial_market_flow.sh
+  args:
+    chdir: "{{ brs_project_root }}/db_init"
+    executable: /bin/bash
+  ignore_errors: yes
+  when: clean_install is defined and clean_install | bool 
+
 - name: Restart BRS app
   command:
     service brs restart
