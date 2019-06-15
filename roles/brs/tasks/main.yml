@@ -149,6 +149,16 @@
   ignore_errors: yes
   when: clean_install is defined and clean_install | bool 
 
+- name: Seed round data
+  shell: >
+    sh create_rounds.sh
+  args:
+    chdir: "{{ brs_project_root }}/db_init"
+    executable: /bin/bash
+  ignore_errors: yes
+  when: clean_install is defined and clean_install | bool 
+
+
 - name: Restart BRS app
   command:
     service brs restart
