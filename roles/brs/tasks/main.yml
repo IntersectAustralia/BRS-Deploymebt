@@ -88,7 +88,12 @@
     chdir: "{{ brs_project_root }}"
   when: clean_install is defined and clean_install | bool 
 
-  # Start uWSGI service
+- name: Run database migrations with Merge
+  command: >
+    python3 manage.py makemigrations --merge
+  args:
+    chdir: "{{ brs_project_root }}"
+
 - name: Run database migrations
   command: >
     python3 manage.py migrate
