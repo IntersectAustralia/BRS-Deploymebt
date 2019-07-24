@@ -90,7 +90,7 @@
 
 - name: Run database migrations with Merge
   command: >
-    python3 manage.py makemigrations --merge
+    python3 manage.py makemigrations --merge --noinput
   args:
     chdir: "{{ brs_project_root }}"
 
