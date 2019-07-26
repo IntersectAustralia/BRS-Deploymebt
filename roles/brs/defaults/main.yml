@@ -7,7 +7,7 @@ clean_install: false
 brs_git_repo: git@github.com:IntersectAustralia/USyd-BankRiskSimulator.git
 
 # Github branch to clone, by default it should pull the master branch
-brs_project_git_tag: master
+brs_project_git_tag: BANKRISK-64
 
 brs_project_private_key_file: /home/devel/.ssh/id_rsa
 
@@ -16,3 +16,6 @@ brs_project_root: "/var/www/brs"
 
 # Service file PATH
 brs_service_files_path: "/etc/systemd/system"
+
+#Populate with sample database
+sample_data: false

@@ -51,8 +51,8 @@
     regexp: "^DB_HOST=db$"
     line: "DB_HOST=127.0.0.1"
     backrefs: yes
-
-
+#
+#
 - name: Set BRS DB host for QA, Staging and Prod environments
   lineinfile:
     path: "{{ brs_project_root }}/brs/settings.py"
@@ -136,24 +136,6 @@
   ignore_errors: yes
   when: clean_install is defined and clean_install | bool 
 
-- name: Seed initial cash flow
-  shell: >
-    sh create_initial_cashflow.sh
-  args:
-    chdir: "{{ brs_project_root }}/db_init"
-    executable: /bin/bash
-  ignore_errors: yes
-  when: clean_install is defined and clean_install | bool 
-
-- name: Seed initial cash flow
-  shell: >
-    sh create_initial_market_flow.sh
-  args:
-    chdir: "{{ brs_project_root }}/db_init"
-    executable: /bin/bash
-  ignore_errors: yes
-  when: clean_install is defined and clean_install | bool 
-
 - name: Seed round data
   shell: >
     sh create_rounds.sh
@@ -163,6 +145,59 @@
   ignore_errors: yes
   when: clean_install is defined and clean_install | bool 
 
+- name: Seed sample initial cash flow
+  shell: >
+    sh create_sample_initial_market_flow.sh
+  args:
+    chdir: "{{ brs_project_root }}/db_init"
+    executable: /bin/bash
+  ignore_errors: yes
+  when: clean_install is defined and clean_install | bool and sample_data is defined and sample_data| bool 
+
+- name: Seed sample round 1 data
+  shell: >
+    sh create_sample_round1_market_flow.sh
+  args:
+    chdir: "{{ brs_project_root }}/db_init"
+    executable: /bin/bash
+  ignore_errors: yes
+  when: clean_install is defined and clean_install | bool and sample_data is defined and sample_data| bool 
+
+- name: Seed sample round 2 data
+  shell: >
+    sh create_sample_round2_market_flow.sh
+  args:
+    chdir: "{{ brs_project_root }}/db_init"
+    executable: /bin/bash
+  ignore_errors: yes
+  when: clean_install is defined and clean_install | bool and sample_data is defined and sample_data| bool 
+
+- name: Seed initial cash flow
+  shell: >
+    sh create_initial_cashflow.sh
+  args:
+    chdir: "{{ brs_project_root }}/db_init"
+    executable: /bin/bash
+  ignore_errors: yes
+  when: clean_install is defined and clean_install | bool
+
+- name: Seed initial market flow
+  shell: >
+    sh create_initial_market_flow.sh
+  args:
+    chdir: "{{ brs_project_root }}/db_init"
+    executable: /bin/bash
+  ignore_errors: yes
+  when: clean_install is defined and clean_install | bool
+
+- name: Seed round 2 market flow
+  shell: >
+    sh create_round2_market_flow.sh
+  args:
+    chdir: "{{ brs_project_root }}/db_init"
+    executable: /bin/bash
+  ignore_errors: yes
+  when: clean_install is defined and clean_install | bool
 
 - name: Restart BRS app
   command:
