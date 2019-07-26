@@ -35,10 +35,21 @@ These tasks should be run on the machine that is being deployed to. They should 
    1. Run the playbook.
       NOTE: Running the below command will wipe out the existing data and the database.
 
-      ```ansible-playbook site.yml -i hosts-<qa/staging> --extra-vars "clean_install=true superuser_password=<NEW PASSWORD>"```
+      ```ansible-playbook site.yml -i hosts-<qa/staging> --extra-vars "clean_install=true sample_data=false superuser_password=<NEW PASSWORD>"```
 
       * `clean_install` - Setting this to true will perform ansible tasks tagged with `clean_install`. Example: Dropping existing data or database.
+      * `sample_data` - Setting this to false will not upload seed data to the BRS system.
       * `project_secret_key` - This should be a long random string and is used for security purposes by the app. The easiest way to supply this is to use LastPass to generate a 50 character string and then paste it in this command.
+
+  2. Running the playbook to clean install and have sample data
+    NOTE: Running the below command will wipe out the existing data and the database.
+
+     ```ansible-playbook site.yml -i hosts-<qa/staging> --extra-vars "clean_install=true sample_data=true superuser_password=<NEW PASSWORD>"```
+
+     * `clean_install` - Setting this to true will perform ansible tasks tagged with `clean_install`. Example: Dropping existing data or database.
+     * `sample_data` - Setting this to true will upload seed data to the BRS system. 
+     * `project_secret_key` - This should be a long random string and is used for security purposes by the app. The easiest way to supply this is to use LastPass to generate a 50 character string and then paste it in this command.
+
 
 ### Updating an existing installation
 
