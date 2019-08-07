@@ -48,7 +48,7 @@
 - name: Set BRS DB host for QA, Staging and Prod environments
   lineinfile:
     path: "{{ brs_project_root }}/config.ini"
-    regexp: "^DB_HOST=db$"
+    regexp: "^DB_HOST = db$"
     line: "DB_HOST=127.0.0.1"
     backrefs: yes
 #
