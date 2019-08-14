@@ -51,8 +51,14 @@
     regexp: "^DB_HOST = db$"
     line: "DB_HOST=127.0.0.1"
     backrefs: yes
-#
-#
+
+- name: Set BRS App Name
+  lineinfile:
+    path: "{{ brs_project_root }}/config.ini"
+    regexp: "^APP_NAME*"
+    line: "APP_NAME = {{ brs_environment }}"
+    backrefs: yes
+
 - name: Set BRS DB host for QA, Staging and Prod environments
   lineinfile:
     path: "{{ brs_project_root }}/brs/settings.py"
