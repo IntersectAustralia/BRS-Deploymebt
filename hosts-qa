@@ -3,3 +3,4 @@ brs-qa.intersect.org.au
 
 [brs:vars]
 ansible_python_interpreter=/usr/bin/python3
+brs_environment=Banking Risk Simulator (QA)
